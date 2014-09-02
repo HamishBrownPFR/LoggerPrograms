@@ -2,16 +2,26 @@
 'Version 0.1
 Dim LCount
 Public CS650(192,6)'192 CS650's each recording 6 variables (using the "M3!" command)
+Public BattV
+Public PTemp_C
+
 DataTable (DatoutCS650,1,-1)      'DataTable(Name, TrigVar, Size) See page 128 of CR1000 manual for description
-  DataInterval (0,15,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
-  Sample (192,CS650(),IEEE4)      'Sample(Reps, Source, DataType)
+  DataInterval (0,28,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
+  Average(1,BattV,FP2,False)	
+  Average(1,PTemp_C,FP2,False)  
+  Sample (1152,CS650(),IEEE4)      'Sample(Reps, Source, DataType)
 EndTable
 BeginProg
-Scan (15,Min,0,0)
+SequentialMode
+Scan (7,Min,0,0)
+  
+  Battery(BattV) 'Default Datalogger Battery Voltage measurement 'BattV'
+  PanelTemp(PTemp_C,_60Hz)  'Default Wiring Panel Temperature measurement 'PTemp_C'
+        
   PortSet(1,1) 'Turn MUX1 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 1
-    Delay(0,3,Sec) 'Allow CS650's to warm up
-     LCount=1
-      SubScan(0,uSec,32)'last number is no. of TDRs
+      Delay(0,3,Sec) 'Allow CS650's to warm up
+      LCount=1
+      SubScan(0,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs Leaving 650 mSec between each scan to allow SDI-12 function to excicute
         PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
         SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
         LCount=LCount+1
@@ -20,7 +30,7 @@ Scan (15,Min,0,0)
     Delay(0,150,mSec) 'Wait a bit between multiplexors
   PortSet(2,1) 'Turn MUX2 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 2
     Delay(0,3,Sec) 'Allow CS650's to warm up
-      SubScan(0,uSec,32)'last number is no. of TDRs
+      SubScan(0,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs
         PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
         SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
         LCount=LCount+1
@@ -29,39 +39,39 @@ Scan (15,Min,0,0)
     Delay(0,150,mSec) 'Wait a bit between multiplexors
   PortSet(3,1) 'Turn MUX3 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 3
     Delay(0,3,Sec) 'Allow CS650's to warm up
-      SubScan(0,uSec,32)'last number is no. of TDRs
+      SubScan(0,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs
         PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
         SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
         LCount=LCount+1
       NextSubScan
   PortSet(3,0) 'Turn MUX3 and associated CS650's OFF!!
     Delay(0,150,mSec) 'Wait a bit between multiplexors
-  PortSet(4,1) 'Turn MUX4 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 4
-    Delay(0,3,Sec) 'Allow CS650's to warm up
-      SubScan(0,uSec,32)'last number is no. of TDRs
-        PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
-        SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
-        LCount=LCount+1
-      NextSubScan
-  PortSet(4,0) 'Turn MUX4 and associated CS650's OFF!!
-    Delay(0,150,mSec) 'Wait a bit between multiplexors
-  PortSet(5,1) 'Turn MUX5 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 5
-    Delay(0,3,Sec) 'Allow CS650's to warm up
-      SubScan(0,uSec,32)'last number is no. of TDRs
-        PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
-        SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
-        LCount=LCount+1
-      NextSubScan
-  PortSet(5,0) 'Turn MUX5 and associated CS650's OFF!!
-    Delay(0,150,mSec) 'Wait a bit between multiplexors
-  PortSet(6,1) 'Turn MUX6 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 6
-    Delay(0,3,Sec) 'Allow CS650's to warm up
-      SubScan(0,uSec,32)'last number is no. of TDRs
-        PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
-        SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
-        LCount=LCount+1
-      NextSubScan
-  PortSet(6,0) 'Turn MUX6 and associated CS650's OFF!!
+  'PortSet(4,1) 'Turn MUX4 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 4
+  '  Delay(0,3,Sec) 'Allow CS650's to warm up
+  '    SubScan(650,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs
+  '      PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
+  '      SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
+  '      LCount=LCount+1
+  '    NextSubScan
+  'PortSet(4,0) 'Turn MUX4 and associated CS650's OFF!!
+  '  Delay(0,150,mSec) 'Wait a bit between multiplexors
+  'PortSet(5,1) 'Turn MUX5 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 5
+  '  Delay(0,3,Sec) 'Allow CS650's to warm up
+  '    SubScan(650,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs
+  '      PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
+  '      SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
+  '      LCount=LCount+1
+  '    NextSubScan
+  'PortSet(5,0) 'Turn MUX5 and associated CS650's OFF!!
+  '  Delay(0,150,mSec) 'Wait a bit between multiplexors
+  'PortSet(6,1) 'Turn MUX6 and associated CS650's ON!!.  Connect multiplexor reset and relay for 650's power to com port 6
+  '  Delay(0,3,Sec) 'Allow CS650's to warm up
+  '    SubScan(650,mSec,32)'  SubScan(SubInterval, Units, Count) Count is the number no. of TDRs
+  '      PulsePort(8,10000) 'Switch to next AM16/32 channel.  Connect multiplexor clock to Com port 8
+  '      SDI12Recorder (CS650(LCount,1),7,0,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C7
+  '     	LCount=LCount+1
+  '    NextSubScan
+  'PortSet(6,0) 'Turn MUX6 and associated CS650's OFF!!
     Delay(0,150,mSec) 'Wait a bit between multiplexors
 CallTable DatoutCS650 'Call Data Table
 NextScan
