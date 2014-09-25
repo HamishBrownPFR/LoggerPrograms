@@ -6,6 +6,8 @@ Public BattV
 Public PTemp_C
 Public PotTemp(9)
 Public Irrigations
+Public SubIrrigations
+Public Irrigations2
 Units BattV=Volts
 Units PTemp_C=Deg C
 Public WP(4)
@@ -41,6 +43,7 @@ DataTable(Table1,True,-1)
 	Average(1,DeltaT_C(3),FP2,False)
 	Average(1,DeltaT_C(4),FP2,False)
 	Average(1,Irrigations, FP2, False)
+	Average(1,Irrigations2, FP2, False)
 	Average(1,TT_C(1),FP2,False)									
 	Average(1,SBT_C(1),FP2,False)					
 	Average(1,TTmV(1),FP2,False)					
@@ -64,6 +67,7 @@ EndTable
 'Main Program
 BeginProg
 	'Main Scan
+	SubIrrigations = 1
 	Scan(30,min,1,0)
 		'Default Datalogger Battery Voltage measurement 'BattV'
 		Battery(BattV)
@@ -208,6 +212,14 @@ BeginProg
 		   PortSet(1,1)
 		   Delay(1,20,sec)
 		   PortSet(1,0)
+		   If (SubIrrigations >= 2) Then
+		       PortSet(2,1)
+		       Delay(1,20,sec)
+		       PortSet(2,0)
+			   SubIrrigations = 0
+			   Irrigations2 = Irrigations2 + 1
+			Endif
+		   SubIrrigations = SubIrrigations + 1
 		   Irrigations = Irrigations + 1
 		EndIf
 		
