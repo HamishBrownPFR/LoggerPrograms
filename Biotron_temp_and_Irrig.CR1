@@ -212,13 +212,13 @@ BeginProg
 		   PortSet(1,1)
 		   Delay(1,20,sec)
 		   PortSet(1,0)
-		   If (SubIrrigations >= 2) Then
+		   'If (SubIrrigations >= 2) Then
 		       PortSet(2,1)
 		       Delay(1,20,sec)
 		       PortSet(2,0)
-			   SubIrrigations = 0
-			   Irrigations2 = Irrigations2 + 1
-			Endif
+			'   SubIrrigations = 0
+			 '  Irrigations2 = Irrigations2 + 1
+			'Endif
 		   SubIrrigations = SubIrrigations + 1
 		   Irrigations = Irrigations + 1
 		EndIf
