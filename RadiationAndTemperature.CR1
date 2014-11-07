@@ -49,7 +49,7 @@ Units LinPAR=mmolPAR
 						
 'Define Data Tables						
 DataTable(AllData,True,-1)						
-	DataInterval(0,10,min,10)					
+	DataInterval(0,5,min,10)					
 	Average(1,BattV,FP2,False)					
 	Average(1,PTemp_C,FP2,False)					
 	Average(1,AirTC,FP2,False)					
@@ -224,7 +224,7 @@ EndTable
 'Main Program						
 BeginProg						
 	'Main Scan.  Scan(Internal, Units, BufferSize, Count)					
-	Scan(10,min,1,0)					
+	Scan(5,min,1,0)					
 		'Default Datalogger Battery Voltage measurement 'BattV'				
 		Battery(BattV)				
 		'Default Wiring Panel Temperature measurement 'PTemp_C'				
@@ -236,7 +236,7 @@ BeginProg
 		'LI200X Pyranometer measurements 'SlrMJ' and 'SlrkW'.  Voltdiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Ofset)				
 		VoltDiff(SlrkW,1,mV7_5,6,True,0,_60Hz,1,0)				
 		If SlrkW<0 Then SlrkW=0				
-		SlrMJ=SlrkW*0.12				
+		SlrMJ=SlrkW*0.06				
 		SlrkW=SlrkW*0.2				
 		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'.  PulseCount(Dest, Reps, Pchan, Pconfig, Poption, Mult, Offset)				
 		PulseCount(Rain_mm,1,1,2,0,1,0)				
@@ -796,84 +796,84 @@ BeginProg
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(1),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(1) < 0 Then SlrReflectkW(1) = 0		
-				SlrReflectMJ(1)=SlrReflectkW(1) * 0.12		
+				SlrReflectMJ(1)=SlrReflectkW(1) * 0.06		
 				SlrReflectkW(1)=SlrReflectkW(1) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(2),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(2) < 0 Then SlrReflectkW(2) = 0		
-				SlrReflectMJ(2)=SlrReflectkW(2) * 0.12		
+				SlrReflectMJ(2)=SlrReflectkW(2) * 0.06		
 				SlrReflectkW(2)=SlrReflectkW(2) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(3),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(3) < 0 Then SlrReflectkW(3) = 0		
-				SlrReflectMJ(3)=SlrReflectkW(3) * 0.12		
+				SlrReflectMJ(3)=SlrReflectkW(3) * 0.06		
 				SlrReflectkW(3)=SlrReflectkW(3) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(4),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(4) < 0 Then SlrReflectkW(4) = 0		
-				SlrReflectMJ(4)=SlrReflectkW(4) * 0.12		
+				SlrReflectMJ(4)=SlrReflectkW(4) * 0.06		
 				SlrReflectkW(4)=SlrReflectkW(4) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(5),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(5) < 0 Then SlrReflectkW(5) = 0		
-				SlrReflectMJ(5)=SlrReflectkW(5) * 0.12		
+				SlrReflectMJ(5)=SlrReflectkW(5) * 0.06		
 				SlrReflectkW(5)=SlrReflectkW(5) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(6),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(6) < 0 Then SlrReflectkW(6) = 0		
-				SlrReflectMJ(6)=SlrReflectkW(6) * 0.12		
+				SlrReflectMJ(6)=SlrReflectkW(6) * 0.06		
 				SlrReflectkW(6)=SlrReflectkW(6) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(7),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(7) < 0 Then SlrReflectkW(7) = 0		
-				SlrReflectMJ(7)=SlrReflectkW(7) * 0.12		
+				SlrReflectMJ(7)=SlrReflectkW(7) * 0.06		
 				SlrReflectkW(7)=SlrReflectkW(7) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(8),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(8) < 0 Then SlrReflectkW(8) = 0		
-				SlrReflectMJ(8)=SlrReflectkW(8) * 0.12		
+				SlrReflectMJ(8)=SlrReflectkW(8) * 0.06		
 				SlrReflectkW(8)=SlrReflectkW(8) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(9),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(9) < 0 Then SlrReflectkW(9) = 0		
-				SlrReflectMJ(9)=SlrReflectkW(9) * 0.12		
+				SlrReflectMJ(9)=SlrReflectkW(9) * 0.06		
 				SlrReflectkW(9)=SlrReflectkW(9) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(10),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(10) < 0 Then SlrReflectkW(10) = 0		
-				SlrReflectMJ(10)=SlrReflectkW(10) * 0.12		
+				SlrReflectMJ(10)=SlrReflectkW(10) * 0.06		
 				SlrReflectkW(10)=SlrReflectkW(10) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(11),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(11) < 0 Then SlrReflectkW(11) = 0		
-				SlrReflectMJ(11)=SlrReflectkW(11) * 0.12		
+				SlrReflectMJ(11)=SlrReflectkW(11) * 0.06		
 				SlrReflectkW(11)=SlrReflectkW(11) * 0.2		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
 				VoltDiff(SlrReflectkW(12),1,mV7_5,4,True,0,_60Hz,1,0)		
 				if SlrReflectkW(12) < 0 Then SlrReflectkW(12) = 0		
-				SlrReflectMJ(12)=SlrReflectkW(12) * 0.12		
+				SlrReflectMJ(12)=SlrReflectkW(12) * 0.06		
 				SlrReflectkW(12)=SlrReflectkW(12) * 0.2		
 		'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
 		PortSet(4,0)				
@@ -976,7 +976,7 @@ BeginProg
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'107 Temperature Probe measurement 'T108_C.  Therm107(Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
-				Therm107(SoilSurfTC(24),1,16,VX1,0,_60hz,1,0)		
+				Therm107(SoilSurfTC(24),1,16,VX1,0,_60Hz,1,0)		
 			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
 			PulsePort(1,10000)			
 				'HFP01 Heat Flux Plates		
