@@ -1,0 +1,157 @@
+'CR1000
+'Created by Short Cut modified by Hamish to make it better
+
+'Declare Variables and Units
+Dim LCount
+Dim CellCon
+Dim NowMin
+Public BattV
+Public PTemp_C
+Public VW(64)
+Public PA_uS(64)
+Public RTime(9)
+
+Units BattV=Volts
+Units PTemp_C=Deg C
+Units PA_uS=uSec
+Units VW=mm/mm
+
+'Define Data Tables
+DataTable(Table2,True,-1)
+	DataInterval(0,60,Min,10)
+	Minimum(1,BattV,FP2,False)
+	Average(1,PTemp_C,FP2,False)
+	Average(1,VW(1),FP2,False)
+	Average(1,VW(2),FP2,False)
+	Average(1,VW(3),FP2,False)
+	Average(1,VW(4),FP2,False)
+	Average(1,VW(5),FP2,False)
+	Average(1,VW(6),FP2,False)
+	Average(1,VW(7),FP2,False)
+	Average(1,VW(8),FP2,False)
+	Average(1,VW(9),FP2,False)
+	Average(1,VW(10),FP2,False)
+	Average(1,VW(11),FP2,False)
+	Average(1,VW(12),FP2,False)
+	Average(1,VW(13),FP2,False)
+	Average(1,VW(14),FP2,False)
+	Average(1,VW(15),FP2,False)
+	Average(1,VW(16),FP2,False)
+	Average(1,VW(17),FP2,False)
+	Average(1,VW(18),FP2,False)
+	Average(1,VW(19),FP2,False)
+	Average(1,VW(20),FP2,False)
+	Average(1,VW(21),FP2,False)
+	Average(1,VW(22),FP2,False)
+	Average(1,VW(23),FP2,False)
+	Average(1,VW(24),FP2,False)
+	Average(1,VW(25),FP2,False)
+	Average(1,VW(26),FP2,False)
+	Average(1,VW(27),FP2,False)
+	Average(1,VW(28),FP2,False)
+	Average(1,VW(29),FP2,False)
+	Average(1,VW(30),FP2,False)
+	Average(1,VW(31),FP2,False)
+	Average(1,VW(32),FP2,False)
+	Average(1,VW(33),FP2,False)
+	Average(1,VW(34),FP2,False)
+	Average(1,VW(35),FP2,False)
+	Average(1,VW(36),FP2,False)
+	Average(1,VW(37),FP2,False)
+	Average(1,VW(38),FP2,False)
+	Average(1,VW(39),FP2,False)
+	Average(1,VW(40),FP2,False)
+	Average(1,VW(41),FP2,False)
+	Average(1,VW(42),FP2,False)
+	Average(1,VW(43),FP2,False)
+	Average(1,VW(44),FP2,False)
+	Average(1,VW(45),FP2,False)
+	Average(1,VW(46),FP2,False)
+	Average(1,VW(47),FP2,False)
+	Average(1,VW(48),FP2,False)
+	Average(1,VW(49),FP2,False)
+	Average(1,VW(50),FP2,False)
+	Average(1,VW(51),FP2,False)
+	Average(1,VW(52),FP2,False)
+	Average(1,VW(53),FP2,False)
+	Average(1,VW(54),FP2,False)
+	Average(1,VW(55),FP2,False)
+	Average(1,VW(56),FP2,False)
+	Average(1,VW(57),FP2,False)
+	Average(1,VW(58),FP2,False)
+	Average(1,VW(59),FP2,False)
+	Average(1,VW(60),FP2,False)
+	Average(1,VW(61),FP2,False)
+	Average(1,VW(62),FP2,False)
+	Average(1,VW(63),FP2,False)
+	Average(1,VW(64),FP2,False)
+EndTable
+
+'Main Program
+BeginProg
+	'Main Scan
+	Scan(60,Min,1,0)
+		'Default Datalogger Battery Voltage measurement 'BattV'
+		Battery(BattV)
+		'Default Wiring Panel Temperature measurement 'PTemp_C'
+		PanelTemp(PTemp_C,_60Hz)
+		
+		'Turn on first MUX
+		PortSet(3,1)
+		Delay(0,150,mSec)
+		LCount=1
+		SubScan(0,uSec,32)
+			'Switch to next AM416 Multiplexer channel
+			PulsePort(5,10000)
+			'CS616 Water Content Reflectometer measurements 'VW()' and 'PA_uS()' on the AM16/32 Multiplexer
+			'CS616(Dest, Reps, SEChan, Port, MeasPerPort, Mult, Offset)
+			CS616(PA_uS(LCount),1,1,1,1,1,0)
+			LCount=LCount+1
+		NextSubScan
+		'Convert voltages into soil water contents
+		For LCount=1 To 32
+			VW(LCount)=-0.0663+(-0.0063*PA_uS(LCount))+(0.0007*PA_uS(LCount)^2)
+		Next
+		'Turn AM16/32 Multiplexer Off
+		PortSet(3,0)
+		Delay(0,150,mSec)
+		
+		'Turn 2nd MUX on 
+		PortSet(4,1)
+		Delay(0,150,mSec)
+		LCount=33
+		SubScan(0,uSec,32)
+			'Switch to next AM416 Multiplexer channel
+			PulsePort(5,10000)
+			'CS616 Water Content Reflectometer measurements 'VW_2()' and 'PA_uS_2()' on the AM16/32 Multiplexer
+			'CS616(Dest, Reps, SEChan, Port, MeasPerPort, Mult, Offset)
+			CS616(PA_uS_2(LCount),1,2,2,1,1,0)
+			LCount=LCount+1
+		NextSubScan
+		For LCount=33 To 64
+			VW(LCount)=-0.0663+(-0.0063*PA_uS(LCount))+(0.0007*PA_uS(LCount)^2)
+		Next
+		'Turn AM16/32 Multiplexer Off
+		PortSet(4,0)
+		Delay(0,150,mSec)
+		
+		'Cellular Phone Control				
+        'Turn the cell phone on between 900 and 1800 hours				
+		RealTime(RTime(1))		
+		'1=year, 2=month, 3=day of month, 4=hour of day, 5=minutes, 6=seconds, 7=microseconds, 8=day of week, 9=day of year		
+		NowMin=RTime(4)*60+RTime(5)		
+		If NowMin>= 540 and NowMIn<=1080 Then		
+			CellCon=1	
+		Else		
+			CellCon=0	
+		EndIf		
+		If BattV<11.5 then		
+			CellCon=0	
+		EndIf		
+		'PortSet(7,CellCon)				
+		SW12(CellCon)
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)	
+		'Call Data Tables and Store Data
+		CallTable(Table2)
+	NextScan
+EndProg 
