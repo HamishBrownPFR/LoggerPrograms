@@ -97,8 +97,8 @@ BeginProg
 		        Therm109(T109_C(9),1,2,1,0,_60Hz,1,0)
 		    	Therm109(T109_C(10),1,4,2,0,_60Hz,1,0)
 		    PulsePort(1,10000)
-		    	Therm109(T109_C(11),1,2,1,0,_60Hz,1,0)
-		    	Therm109(T109_C(12),1,4,2,0,_60Hz,1,0)
+		    	'Therm109(T109_C(11),1,2,1,0,_60Hz,1,0)
+		    	'Therm109(T109_C(12),1,4,2,0,_60Hz,1,0)
 		    PulsePort(1,10000)
 		        Therm109(T109_C(13),1,2,1,0,_60Hz,1,0)
 		    	Therm109(T109_C(14),1,4,2,0,_60Hz,1,0)		
@@ -124,6 +124,10 @@ BeginProg
 		        Therm109(T109_C(27),1,2,1,0,_60Hz,1,0)
 		    	Therm109(T109_C(28),1,4,2,0,_60Hz,1,0)
 				'Turn AM416 Multiplexer Off
+			PulsePort(1,10000)
+		    	Therm109(T109_C(11),1,2,1,0,_60Hz,1,0)
+		    	Therm109(T109_C(12),1,4,2,0,_60Hz,1,0)
+		    
 		PortSet(2,0)
 		'Call Data Tables and Store Data
 		CallTable(Table1)
