@@ -208,18 +208,18 @@ BeginProg
 		 MeanWP = (WP(1) + WP(2) + WP(3) + WP(4) )/4
 				
 		'If it is dry enough turn the irrigation on for a bit
-		If (MeanWP >= 2.4) Then
+		If (MeanWP >= 2.6) Then
 		   PortSet(1,1)
 		   Delay(1,20,sec)
 		   PortSet(1,0)
-		   'If (SubIrrigations >= 2) Then
+		   'If (SubIrrigations >= 3) Then
 		       PortSet(2,1)
 		       Delay(1,20,sec)
 		       PortSet(2,0)
 			'   SubIrrigations = 0
 			 '  Irrigations2 = Irrigations2 + 1
 			'Endif
-		   SubIrrigations = SubIrrigations + 1
+		   'SubIrrigations = SubIrrigations + 1
 		   Irrigations = Irrigations + 1
 		EndIf
 		

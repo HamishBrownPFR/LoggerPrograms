@@ -1,0 +1,51 @@
+'Program to control soil moisture and temperature measurements for the stony soil lysimeters
+'Still needs tipping spoons programed in.  C2 and C3 reserved for this in input to be bussed into C1 with CS650's
+'Version 0.1
+Dim LCount
+Dim SDIadd
+Public CS650(30,6)'96 CS650's each recording 6 variables (using the "M3!" command)
+Public BattV
+Public PTemp_C
+
+DataTable (CS650Callibration,1,-1)      'DataTable(Name, TrigVar, Size) See page 128 of CR1000 manual for description
+  DataInterval (0,30,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
+  Average(1,BattV,FP2,False)	
+  Average(1,PTemp_C,FP2,False)  
+  Sample (180,CS650(),IEEE4)		 'Sample(Reps, Source, DataType)
+EndTable
+BeginProg
+SequentialMode
+Scan (30,Min,0,0)
+  
+  Battery(BattV) 'Default Datalogger Battery Voltage measurement 'BattV'
+  PanelTemp(PTemp_C,_60Hz)  'Default Wiring Panel Temperature measurement 'PTemp_C'
+
+  'Default Datalogger Battery Voltage measurement 'BattV'				
+		Battery(BattV)				
+		'Default Wiring Panel Temperature measurement 'PTemp_C'				
+		PanelTemp(PTemp_C,_60Hz)				
+         LCount=1
+		 SDIadd=0
+		 SubScan(0,mSec,10)'
+		  SDI12Recorder (CS650(LCount,1),1,SDIadd,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C1
+          LCount=LCount+1
+		  SDIadd=SDIadd+1
+         NextSubScan
+		 
+		 SDIadd=0
+		 SubScan(0,mSec,10)'
+		  SDI12Recorder (CS650(LCount,1),3,SDIadd,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C1
+          LCount=LCount+1
+		  SDIadd=SDIadd+1
+         NextSubScan
+		 
+		 SDIadd=0
+		 SubScan(0,mSec,10)'
+		  SDI12Recorder (CS650(LCount,1),5,SDIadd,"M3!",1.0,0) 'SDI12Recorder(Dest, SDIPort, SDIAddress, SDICommand, Multiplier, Offset)  All CS650's have an SDI address of 0 and all the sensor leads from MUXs are bused into C1
+          LCount=LCount+1
+		  SDIadd=SDIadd+1
+         NextSubScan
+  Delay(0,150,mSec) 'Wait a bit between multiplexors
+CallTable CS650Callibration 'Call Data Table
+NextScan
+EndProg
