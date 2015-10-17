@@ -1,0 +1,52 @@
+'Program to capture drainage data from tipping spoons in stony soil lysimeters
+'Connect Datalogger C1, C2 and C3 to Pulse channel extender port C1out, C2 and C3.  C1in and C1out on the pulse channel extender need to be conntected with a jumber of wire.
+Public Drain(24)
+Public BattV
+Public PTemp_C
+Public AirTC						
+Public RH						
+Public SlrkW						
+Public SlrMJ						
+Public Rain_mm						
+Public WS_ms
+
+DataTable (StonyLysimetersDrain,1,-1)      'DataTable(Name, TrigVar, Size) See page 128 of CR1000 manual for description
+  DataInterval (0,15,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
+  Average(1,BattV,FP2,False)	
+  Average(1,PTemp_C,FP2,False)  
+  Totalize(24,Drain(),FP2,False)					
+  Average(1,AirTC,FP2,False)					
+  Maximum(1,RH,FP2,False,False)					
+  Average(1,SlrkW,FP2,False)					
+  Totalize(1,SlrMJ,IEEE4,False)					
+  Totalize(1,Rain_mm,FP2,False)					
+  Average(1,WS_ms,FP2,False)		 'Sample(Reps, Source, DataType)
+EndTable
+BeginProg
+SequentialMode
+Scan (15,Min,0,0)
+       'Default Datalogger Battery Voltage measurement 'BattV'				
+		Battery(BattV)				
+		'Default Wiring Panel Temperature measurement 'PTemp_C'				
+		PanelTemp(PTemp_C,_60Hz)				
+		'CS500 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'.  VoltSe(Dest, Reps, Range, SEChan, MeasOffset, SettlingTime, Integ, Mult, Offset)				
+		VoltSE(AirTC,1,mV2500,9,0,0,_60Hz,0.1,-40)				
+		VoltSE(RH,1,mV2500,10,0,0,_60Hz,0.1,0)				
+		If (RH>100) And (RH<108) Then RH=100				
+		'LI200X Pyranometer measurements 'SlrMJ' and 'SlrkW'.  Voltdiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Ofset)				
+		VoltDiff(SlrkW,1,mV7_5,6,True,0,_60Hz,1,0)				
+		If SlrkW<0 Then SlrkW=0				
+		SlrMJ=SlrkW*0.06				
+		SlrkW=SlrkW*0.2				
+		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'.  PulseCount(Dest, Reps, Pchan, Pconfig, Poption, Mult, Offset)				
+		PulseCount(Rain_mm,1,1,2,0,1,0)				
+		'NRG #40 Wind Speed Sensor measurements 'WS_ms'.  PulseCount(Dest, Reps, Pchan, Pconfig, Poption, Mult, Offset)				
+		PulseCount(WS_ms,1,2,2,1,0.765,0.35)				
+		If WS_ms<0.36 Then WS_ms=0				
+        'Collect data from tipping spoons.	
+	    SDMSW8A(Drain(),24,0,2,1,1,0)  
+		'SDMSW8A(Dest,Reps,SDMAddress,FunctOp,StartChan,Mult,Offset)
+	Delay(0,150,mSec) 'Wait a bit before doing report
+CallTable StonyLysimetersDrain 'Call Data Table
+NextScan
+EndProg

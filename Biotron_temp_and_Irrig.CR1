@@ -205,21 +205,17 @@ BeginProg
           WP(4) = exp(Alpha * DeltaT_C(4) + Beta)
 		  
 		'Calculate mean
-		 MeanWP = (WP(1) + WP(2) + WP(4) )/3
+		 MeanWP = (WP(1) + WP(2) + WP(3) )/3
 				
 		'If it is dry enough turn the irrigation on for a bit
 		If (MeanWP >= 2.4) Then
+		   PortSet(2,1)
+		   Delay(1,40,sec)
+		   PortSet(2,0)
 		   PortSet(1,1)
-		   Delay(1,20,sec)
+		   Delay(1,40,sec)
 		   PortSet(1,0)
-		   'If (SubIrrigations >= 3) Then
-		       PortSet(2,1)
-		       Delay(1,20,sec)
-		       PortSet(2,0)
-			'   SubIrrigations = 0
-			 '  Irrigations2 = Irrigations2 + 1
-			'Endif
-		   'SubIrrigations = SubIrrigations + 1
+		   Delay(1,20,sec)
 		   Irrigations = Irrigations + 1
 		EndIf
 		
