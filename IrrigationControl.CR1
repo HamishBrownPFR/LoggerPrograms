@@ -1,0 +1,176 @@
+'CR1000
+'Created by Short Cut (3.0)
+
+'Declare Variables and Units
+Public BattV
+Public PTemp_C
+Public T107_C
+Public LeafWet_kohms
+Public RTime(9)	
+public IrrigFlag
+public IrrigCount
+public CoolingCount
+Public WP(4)
+Public StartTemp_C(4)
+Public Temp1Sec_C(4)
+Public Temp30Sec_C(4)
+Public DeltaT_C(4)
+Public MeanWP
+Public IrrigDurat
+Public GoodMeasures
+Const Alpha = 1
+Const Beta = 0
+
+
+Units BattV=Volts
+Units PTemp_C=Deg C
+Units T107_C=Deg C
+Units LeafWet_kohms=kilohms						
+
+'Define Data Tables
+DataTable(PotTables,True,-1)
+	DataInterval(0,20,min,10)
+	Average(1,BattV,FP2,False)					
+	Average(1,PTemp_C,FP2,False)					
+	Sample(1,T107_C,FP2)
+	Average(1,LeafWet_kohms,FP2,False)	
+	Average(1,WP(1),FP2,False)	
+	Average(1,WP(2),FP2,False)
+	Average(1,WP(3),FP2,False)
+	Average(1,WP(4),FP2,False)
+	Average(1,MeanWP,FP2,False)
+	Average(1,IrrigDurat,FP2,False)
+	Average(1,DeltaT_C(1),FP2,False)	
+	Average(1,DeltaT_C(2),FP2,False)
+	Average(1,DeltaT_C(3),FP2,False)
+	Average(1,DeltaT_C(4),FP2,False)
+EndTable
+
+'Main Program
+BeginProg
+	'Main Scan
+	dim IrrigHour = 5
+	dim MaxDurat = 45
+	dim CoolDurat = 1
+	dim CoolTrigger = 26
+	Scan(20,min,1,0)
+		'Default Datalogger Battery Voltage measurement 'BattV'
+		Battery(BattV)
+		'Default Wiring Panel Temperature measurement 'PTemp_C'
+		PanelTemp(PTemp_C,_60Hz)
+		'109 Temperature Probe measurement 'T109_C'
+		'Measure thermoster temperature Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+		Therm107(T107_C,1,16,3,0,_60Hz,1,0)
+		'237 Leaf Wetness Sensor measurement 'LeafWet_kohms'.  BrHalf(Dest, Reps, Range, SEChan, VX/ExChan, MeasPEx, ExmV, RevEx, Settlingtime, Integ, Mult, Offset)				
+		BrHalf(LeafWet_kohms,1,mV25,15,1,1,2500,True,0,250,1,0)				
+		LeafWet_kohms=(1/LeafWet_kohms)-101				
+		
+		'Do soil moisture measurements
+		
+        'Do soil water potential measurements
+        'Measure reference temperature'
+		 PanelTemp(PTemp_C,_60Hz)
+        'Measure Sensors starting temperature
+		'TCDiff (Dest, Reps, Range, DiffChan, TCType, TRef,RevDiff, SettlingTime, Integ, Mult, Offset)
+		 TCDiff (StartTemp_C(1), 1, mV2_5C, 1, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (StartTemp_C(2), 1, mV2_5C, 2, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (StartTemp_C(3), 1, mV2_5C, 3, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (StartTemp_C(4), 1, mV2_5C, 4, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		'Switch heater on
+		 PortSet(7,1)
+		'Pause for a second
+		 Delay(0,1,Sec)
+		'Take 1 Second measurements
+		 TCDiff (Temp1Sec_C(1), 1, mV2_5C, 1, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp1Sec_C(2), 1, mV2_5C, 2, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp1Sec_C(3), 1, mV2_5C, 3, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp1Sec_C(4), 1, mV2_5C, 4, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		'Pause for a further 29 seconds
+		 Delay(0,29,Sec)
+		'Take 30 Second measurements
+		 TCDiff (Temp30Sec_C(1), 1, mV2_5C, 1, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp30Sec_C(2), 1, mV2_5C, 2, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp30Sec_C(3), 1, mV2_5C, 3, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		 TCDiff (Temp30Sec_C(4), 1, mV2_5C, 4, TypeT, PTemp_C,True, 0, _60Hz, 1, 0)
+		'Turn header off
+		 PortSet(7,0)
+		'Do calculations
+		 DeltaT_C(1) = Temp30Sec_C(1) - Temp1Sec_C(1)
+         WP(1) = exp(Alpha * DeltaT_C(1) + Beta)
+		 DeltaT_C(2) = Temp30Sec_C(2) - Temp1Sec_C(2)
+         WP(2) = exp(Alpha * DeltaT_C(2) + Beta)
+		 DeltaT_C(3) = Temp30Sec_C(3) - Temp1Sec_C(3)
+         WP(3) = exp(Alpha * DeltaT_C(3) + Beta)
+		 DeltaT_C(4) = Temp30Sec_C(4) - Temp1Sec_C(4)
+         WP(4) = exp(Alpha * DeltaT_C(4) + Beta)		
+		  
+		 'Calculate mean water potential
+		 MeanWP = 0
+		 GoodMeasures = 0
+		 dim I
+		 For I = 1 to 4
+			If WP(I) = NAN Then
+				GoodMeasures += 0
+			Else
+					MeanWP += WP(I)
+					GoodMeasures += 1
+			EndIf
+		 Next I
+		 
+		 MeanWP = MeanWP/GoodMeasures
+		 
+		 if MeanWP = NAN Then
+			MeanWP = 7.5
+		 Endif
+		 
+		'Call Data Tables and Store Data
+		CallTable(PotTables)
+	
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		
+		'Update time variable				
+		RealTime(RTime(1))		
+		'1=year, 2=month, 3=day of month, 4=hour of day, 5=minutes, 6=seconds, 7=microseconds, 8=day of week, 9=day of year		
+		
+		'Work out how long irrigation should be applied for
+		dim DurationFactor
+		DurationFactor = (MeanWP - 2.5)/5
+		If DurationFactor < 0 Then
+			DurationFactor = 0
+		EndIf
+		If DurationFactor > 1 Then
+			DurationFactor = 1
+		EndIf
+		
+		IrrigDurat = DurationFactor * MaxDurat
+	
+	    'If the time is right apply irrigation
+	    If RTime(4)= IrrigHour and IrrigFlag = 0 and IrrigDurat > 0 Then		
+			PortSet(1,1)				
+			Delay(0,IrrigDurat*2,min)
+			PortSet(1,0)
+			Delay(0,5,Sec)
+			PortSet(2,1)				
+			Delay(0,IrrigDurat,min)
+			PortSet(2,0)
+			IrrigFlag = 1
+			IrrigCount +=1
+		EndIf
+		If Rtime(4) = IrrigHour + 1
+			IrrigFlag = 0
+		Endif
+		
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)
+		
+		If Rtime(4) >= 10 and Rtime(4) < 18 and T107_C > CoolTrigger
+			PortSet(1,1)				
+			Delay(0,CoolDurat*2,Min)
+			PortSet(1,0)
+			Delay(0,5,Sec)
+			PortSet(2,1)				
+			Delay(0,CoolDurat,Min)
+			PortSet(2,0)
+			CoolingCount +=1
+		Endif
+	NextScan
+EndProg
