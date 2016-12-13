@@ -1,0 +1,964 @@
+'CR1000						
+'Created by Hamish Brown using a template made in Excel						
+						
+'Declare Variables and Units						
+Dim TT_K(24)						
+Dim SBT_K(24)						
+Dim m(24)						
+Dim b(24)						
+						
+Public BattV						
+Public PTemp_C						
+Public AirTC						
+Public RH						
+Public SlrkW						
+Public SlrMJ						
+Public Rain_mm						
+Public WS_ms						
+Public LeafWet_kohms						
+Public NetRadn
+Public AlbedoUp
+public AlbedoDown						
+Public TT_C(24)						
+Public SBT_C(24)						
+Public TTmV(24)						
+Public SlrReflectkW(12)						
+Public SlrReflectMJ(12)						
+Public SoilSurfTC(24)						
+Public LinPAR(27)						
+						
+Units BattV=Volts						
+Units PTemp_C=Deg C						
+Units AirTC=Deg C						
+Units RH=%						
+Units SlrkW=kW/m^2						
+Units SlrMJ=MJ/m^2						
+Units Rain_mm=mm						
+Units WS_ms=meters/second						
+Units LeafWet_kohms=kilohms						
+Units NetRadn=W/m^2						
+Units AlbedoUp=MJ/m^2						
+Units AlbedoDown=MJ/m^2						
+Units TT_C=Deg C						
+Units SBT_C=Deg C						
+Units TTmV=mV						
+Units SlrReflectkW=kW/m^2						
+Units SlrReflectMJ=MJ/m^2						
+Units SoilSurfTC=Deg C						
+Units LinPAR=mmolPAR						
+						
+'Define Data Tables						
+DataTable(AllData,True,-1)						
+	DataInterval(0,10,min,10)					
+	Average(1,BattV,FP2,False)					
+	Average(1,PTemp_C,FP2,False)					
+	Average(1,AirTC,FP2,False)					
+	Maximum(1,RH,FP2,False,False)					
+	Average(1,SlrkW,FP2,False)					
+	Totalize(1,SlrMJ,IEEE4,False)					
+	Totalize(1,Rain_mm,FP2,False)					
+	Average(1,WS_ms,FP2,False)					
+	Average(1,LeafWet_kohms,FP2,False)					
+	Average(1,AlbedoUp, FP2, False)
+	Average(1,AlbedoDown, FP2, False)
+	Average(1,NetRadn,FP2,False)					
+	Average(1,SBT_C(1),FP2,False)					
+	Average(1,SBT_C(2),FP2,False)					
+	Average(1,SBT_C(3),FP2,False)					
+	Average(1,SBT_C(4),FP2,False)					
+	Average(1,SBT_C(5),FP2,False)					
+	Average(1,SBT_C(6),FP2,False)					
+	Average(1,SBT_C(7),FP2,False)					
+	Average(1,SBT_C(8),FP2,False)					
+	Average(1,SBT_C(9),FP2,False)					
+	Average(1,SBT_C(10),FP2,False)					
+	Average(1,SBT_C(11),FP2,False)					
+	Average(1,SBT_C(12),FP2,False)					
+	Average(1,SBT_C(13),FP2,False)					
+	Average(1,SBT_C(14),FP2,False)					
+	Average(1,SBT_C(15),FP2,False)					
+	Average(1,SBT_C(16),FP2,False)					
+	Average(1,SBT_C(17),FP2,False)					
+	Average(1,SBT_C(18),FP2,False)					
+	Average(1,SBT_C(19),FP2,False)					
+	Average(1,SBT_C(20),FP2,False)					
+	Average(1,SBT_C(21),FP2,False)					
+	Average(1,SBT_C(22),FP2,False)					
+	Average(1,SBT_C(23),FP2,False)					
+	Average(1,SBT_C(24),FP2,False)					
+	Average(1,TT_C(1),FP2,False)					
+	Average(1,TT_C(2),FP2,False)					
+	Average(1,TT_C(3),FP2,False)					
+	Average(1,TT_C(4),FP2,False)					
+	Average(1,TT_C(5),FP2,False)					
+	Average(1,TT_C(6),FP2,False)					
+	Average(1,TT_C(7),FP2,False)					
+	Average(1,TT_C(8),FP2,False)					
+	Average(1,TT_C(9),FP2,False)					
+	Average(1,TT_C(10),FP2,False)					
+	Average(1,TT_C(11),FP2,False)					
+	Average(1,TT_C(12),FP2,False)					
+	Average(1,TT_C(13),FP2,False)					
+	Average(1,TT_C(14),FP2,False)					
+	Average(1,TT_C(15),FP2,False)					
+	Average(1,TT_C(16),FP2,False)					
+	Average(1,TT_C(17),FP2,False)					
+	Average(1,TT_C(18),FP2,False)					
+	Average(1,TT_C(19),FP2,False)					
+	Average(1,TT_C(20),FP2,False)					
+	Average(1,TT_C(21),FP2,False)					
+	Average(1,TT_C(22),FP2,False)					
+	Average(1,TT_C(23),FP2,False)					
+	Average(1,TT_C(24),FP2,False)					
+	Average(1,TTmV(1),FP2,False)					
+	Average(1,TTmV(2),FP2,False)					
+	Average(1,TTmV(3),FP2,False)					
+	Average(1,TTmV(4),FP2,False)					
+	Average(1,TTmV(5),FP2,False)					
+	Average(1,TTmV(6),FP2,False)					
+	Average(1,TTmV(7),FP2,False)					
+	Average(1,TTmV(8),FP2,False)					
+	Average(1,TTmV(9),FP2,False)					
+	Average(1,TTmV(10),FP2,False)					
+	Average(1,TTmV(11),FP2,False)					
+	Average(1,TTmV(12),FP2,False)					
+	Average(1,TTmV(13),FP2,False)					
+	Average(1,TTmV(14),FP2,False)					
+	Average(1,TTmV(15),FP2,False)					
+	Average(1,TTmV(16),FP2,False)					
+	Average(1,TTmV(17),FP2,False)					
+	Average(1,TTmV(18),FP2,False)					
+	Average(1,TTmV(19),FP2,False)					
+	Average(1,TTmV(20),FP2,False)					
+	Average(1,TTmV(21),FP2,False)					
+	Average(1,TTmV(22),FP2,False)					
+	Average(1,TTmV(23),FP2,False)					
+	Average(1,TTmV(24),FP2,False)					
+	Average(1, SoilSurfTC(1),FP2,False)					
+	Average(1, SoilSurfTC(2),FP2,False)					
+	Average(1, SoilSurfTC(3),FP2,False)					
+	Average(1, SoilSurfTC(4),FP2,False)					
+	Average(1, SoilSurfTC(5),FP2,False)					
+	Average(1, SoilSurfTC(6),FP2,False)					
+	Average(1, SoilSurfTC(7),FP2,False)					
+	Average(1, SoilSurfTC(8),FP2,False)					
+	Average(1, SoilSurfTC(9),FP2,False)					
+	Average(1, SoilSurfTC(10),FP2,False)					
+	Average(1, SoilSurfTC(11),FP2,False)					
+	Average(1, SoilSurfTC(12),FP2,False)					
+	Average(1, SoilSurfTC(13),FP2,False)					
+	Average(1, SoilSurfTC(14),FP2,False)					
+	Average(1, SoilSurfTC(15),FP2,False)					
+	Average(1, SoilSurfTC(16),FP2,False)					
+	Average(1, SoilSurfTC(17),FP2,False)					
+	Average(1, SoilSurfTC(18),FP2,False)					
+	Average(1, SoilSurfTC(19),FP2,False)					
+	Average(1, SoilSurfTC(20),FP2,False)					
+	Average(1, SoilSurfTC(21),FP2,False)					
+	Average(1, SoilSurfTC(22),FP2,False)					
+	Average(1, SoilSurfTC(23),FP2,False)					
+	Average(1, SoilSurfTC(24),FP2,False)					
+	Average(1,SlrReflectkW(1),FP2,False)					
+	Average(1,SlrReflectkW(2),FP2,False)					
+	Average(1,SlrReflectkW(3),FP2,False)					
+	Average(1,SlrReflectkW(4),FP2,False)					
+	Average(1,SlrReflectkW(5),FP2,False)					
+	Average(1,SlrReflectkW(6),FP2,False)					
+	Average(1,SlrReflectkW(7),FP2,False)					
+	Average(1,SlrReflectkW(8),FP2,False)					
+	Average(1,SlrReflectkW(9),FP2,False)					
+	Average(1,SlrReflectkW(10),FP2,False)					
+	Average(1,SlrReflectkW(11),FP2,False)					
+	Average(1,SlrReflectkW(12),FP2,False)					
+	Average(1,SlrReflectMJ(1),FP2,False)					
+	Average(1,SlrReflectMJ(2),FP2,False)					
+	Average(1,SlrReflectMJ(3),FP2,False)					
+	Average(1,SlrReflectMJ(4),FP2,False)					
+	Average(1,SlrReflectMJ(5),FP2,False)					
+	Average(1,SlrReflectMJ(6),FP2,False)					
+	Average(1,SlrReflectMJ(7),FP2,False)					
+	Average(1,SlrReflectMJ(8),FP2,False)					
+	Average(1,SlrReflectMJ(9),FP2,False)					
+	Average(1,SlrReflectMJ(10),FP2,False)					
+	Average(1,SlrReflectMJ(11),FP2,False)					
+	Average(1,SlrReflectMJ(12),FP2,False)					
+	Average(1,LinPAR(1),FP2,False)					
+	Average(1,LinPAR(2),FP2,False)					
+	Average(1,LinPAR(3),FP2,False)					
+	Average(1,LinPAR(4),FP2,False)					
+	Average(1,LinPAR(5),FP2,False)					
+	Average(1,LinPAR(6),FP2,False)					
+	Average(1,LinPAR(7),FP2,False)					
+	Average(1,LinPAR(8),FP2,False)					
+	Average(1,LinPAR(9),FP2,False)					
+	Average(1,LinPAR(10),FP2,False)					
+	Average(1,LinPAR(11),FP2,False)					
+	Average(1,LinPAR(12),FP2,False)					
+	Average(1,LinPAR(13),FP2,False)					
+	Average(1,LinPAR(14),FP2,False)					
+	Average(1,LinPAR(15),FP2,False)					
+	Average(1,LinPAR(16),FP2,False)					
+	Average(1,LinPAR(17),FP2,False)					
+	Average(1,LinPAR(18),FP2,False)					
+	Average(1,LinPAR(19),FP2,False)					
+	Average(1,LinPAR(20),FP2,False)					
+	Average(1,LinPAR(21),FP2,False)					
+	Average(1,LinPAR(22),FP2,False)					
+	Average(1,LinPAR(23),FP2,False)					
+	Average(1,LinPAR(24),FP2,False)					
+	Average(1,LinPAR(25),FP2,False)					
+	Average(1,LinPAR(26),FP2,False)					
+	Average(1,LinPAR(27),FP2,False)					
+EndTable						
+						
+'Main Program						
+BeginProg						
+	'Main Scan.  Scan(Internal, Units, BufferSize, Count)					
+	Scan(2,min,1,0)					
+		'Default Datalogger Battery Voltage measurement 'BattV'				
+		Battery(BattV)				
+		'Default Wiring Panel Temperature measurement 'PTemp_C'				
+		PanelTemp(PTemp_C,_60Hz)				
+		'CS500 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'.  VoltSe(Dest, Reps, Range, SEChan, MeasOffset, SettlingTime, Integ, Mult, Offset)				
+		VoltSE(AirTC,1,mV2500,9,0,0,_60Hz,0.1,-40)				
+		VoltSE(RH,1,mV2500,10,0,0,_60Hz,0.1,0)				
+		If (RH>100) And (RH<108) Then RH=100				
+		'LI200X Pyranometer measurements 'SlrMJ' and 'SlrkW'.  Voltdiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Ofset)				
+		VoltDiff(SlrkW,1,mV7_5,6,True,0,_60Hz,1,0)				
+		If SlrkW<0 Then SlrkW=0				
+		SlrMJ=SlrkW*0.12				
+		SlrkW=SlrkW*0.2				
+		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'.  PulseCount(Dest, Reps, Pchan, Pconfig, Poption, Mult, Offset)				
+		PulseCount(Rain_mm,1,1,2,0,1,0)				
+		'NRG #40 Wind Speed Sensor measurements 'WS_ms'.  PulseCount(Dest, Reps, Pchan, Pconfig, Poption, Mult, Offset)				
+		PulseCount(WS_ms,1,2,2,1,0.765,0.35)				
+		If WS_ms<0.36 Then WS_ms=0				
+		'237 Leaf Wetness Sensor measurement 'LeafWet_kohms'.  BrHalf(Dest, Reps, Range, SEChan, VX/ExChan, MeasPEx, ExmV, RevEx, Settlingtime, Integ, Mult, Offset)				
+		BrHalf(LeafWet_kohms,1,mV25,15,1,1,2500,True,0,250,1,0)				
+		LeafWet_kohms=(1/LeafWet_kohms)-101				
+		'CN1-R net Pyrradiometer. Voltdiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Ofset)				
+		VoltDiff(NetRadn,1,mv250,7,True,0,_60Hz,1500,0)				
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
+		PortSet(2,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(1),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(1),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(1)=1395890000+(7277220*SBT_C(1))+(75992*SBT_C(1)^2)		
+				b(1)=-2662950+(-9950.63*SBT_C(1))+(13555.7*SBT_C(1)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(1)=SBT_C(1)+273.15		
+				TT_K(1)=SBT_K(1)^4+TTmV(1)*m(1)+b(1)		
+				TT_K(1)=SQR(SQR(TT_K(1)))		
+				'Convert target temperature into desired units		
+				TT_C(1)=TT_K(1)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(2),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(2),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(2)=1321320000+(6942310*SBT_C(2))+(77904.1*SBT_C(2)^2)		
+				b(2)=-9474180+(85649.1*SBT_C(2))+(12783*SBT_C(2)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(2)=SBT_C(2)+273.15		
+				TT_K(2)=SBT_K(2)^4+TTmV(2)*m(2)+b(2)		
+				TT_K(2)=SQR(SQR(TT_K(2)))		
+				'Convert target temperature into desired units		
+				TT_C(2)=TT_K(2)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(3),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(3),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(3)=1410870000+(7449540*SBT_C(3))+(77553.2*SBT_C(3)^2)		
+				b(3)=-4211160+(16325.6*SBT_C(3))+(12858.8*SBT_C(3)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(3)=SBT_C(3)+273.15		
+				TT_K(3)=SBT_K(3)^4+TTmV(3)*m(3)+b(3)		
+				TT_K(3)=SQR(SQR(TT_K(3)))		
+				'Convert target temperature into desired units		
+				TT_C(3)=TT_K(3)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(4),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(4),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(4)=1386130000+(7242140*SBT_C(4))+(70955*SBT_C(4)^2)		
+				b(4)=-2918440+(-11589.2*SBT_C(4))+(14149.3*SBT_C(4)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(4)=SBT_C(4)+273.15		
+				TT_K(4)=SBT_K(4)^4+TTmV(4)*m(4)+b(4)		
+				TT_K(4)=SQR(SQR(TT_K(4)))		
+				'Convert target temperature into desired units		
+				TT_C(4)=TT_K(4)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(5),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(5),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(5)=1341860000+(7045270*SBT_C(5))+(73401.4*SBT_C(5)^2)		
+				b(5)=647879+(24049.6*SBT_C(5))+(14900.8*SBT_C(5)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(5)=SBT_C(5)+273.15		
+				TT_K(5)=SBT_K(5)^4+TTmV(5)*m(5)+b(5)		
+				TT_K(5)=SQR(SQR(TT_K(5)))		
+				'Convert target temperature into desired units		
+				TT_C(5)=TT_K(5)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(6),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(6),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(6)=1371730000+(7058920*SBT_C(6))+(76906*SBT_C(6)^2)		
+				b(6)=-6107980+(-35518.4*SBT_C(6))+(14153.7*SBT_C(6)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(6)=SBT_C(6)+273.15		
+				TT_K(6)=SBT_K(6)^4+TTmV(6)*m(6)+b(6)		
+				TT_K(6)=SQR(SQR(TT_K(6)))		
+				'Convert target temperature into desired units		
+				TT_C(6)=TT_K(6)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(7),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(7),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(7)=1321880000+(6953780*SBT_C(7))+(75548.9*SBT_C(7)^2)		
+				b(7)=-7079850+(128729*SBT_C(7))+(13473.3*SBT_C(7)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(7)=SBT_C(7)+273.15		
+				TT_K(7)=SBT_K(7)^4+TTmV(7)*m(7)+b(7)		
+				TT_K(7)=SQR(SQR(TT_K(7)))		
+				'Convert target temperature into desired units		
+				TT_C(7)=TT_K(7)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(8),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(8),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(8)=1339840000+(7046660*SBT_C(8))+(74491.8*SBT_C(8)^2)		
+				b(8)=-5004960+(57560.6*SBT_C(8))+(13317.6*SBT_C(8)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(8)=SBT_C(8)+273.15		
+				TT_K(8)=SBT_K(8)^4+TTmV(8)*m(8)+b(8)		
+				TT_K(8)=SQR(SQR(TT_K(8)))		
+				'Convert target temperature into desired units		
+				TT_C(8)=TT_K(8)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(9),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(9),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(9)=1434740000+(7449330*SBT_C(9))+(73361.9*SBT_C(9)^2)		
+				b(9)=-3427590+(28290.2*SBT_C(9))+(15814.1*SBT_C(9)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(9)=SBT_C(9)+273.15		
+				TT_K(9)=SBT_K(9)^4+TTmV(9)*m(9)+b(9)		
+				TT_K(9)=SQR(SQR(TT_K(9)))		
+				'Convert target temperature into desired units		
+				TT_C(9)=TT_K(9)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(10),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(10),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(10)=1331080000+(6996190*SBT_C(10))+(72127.4*SBT_C(10)^2)		
+				b(10)=-8744260+(-40772.5*SBT_C(10))+(14361*SBT_C(10)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(10)=SBT_C(10)+273.15		
+				TT_K(10)=SBT_K(10)^4+TTmV(10)*m(10)+b(10)		
+				TT_K(10)=SQR(SQR(TT_K(10)))		
+				'Convert target temperature into desired units		
+				TT_C(10)=TT_K(10)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(11),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(11),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(11)=1392520000+(7230830*SBT_C(11))+(75298.8*SBT_C(11)^2)		
+				b(11)=-2209980+(-62020*SBT_C(11))+(14222.2*SBT_C(11)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(11)=SBT_C(11)+273.15		
+				TT_K(11)=SBT_K(11)^4+TTmV(11)*m(11)+b(11)		
+				TT_K(11)=SQR(SQR(TT_K(11)))		
+				'Convert target temperature into desired units		
+				TT_C(11)=TT_K(11)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(12),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(12),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(12)=1336310000+(7096880*SBT_C(12))+(75223.9*SBT_C(12)^2)		
+				b(12)=-2761200+(-14756.1*SBT_C(12))+(14805.4*SBT_C(12)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(12)=SBT_C(12)+273.15		
+				TT_K(12)=SBT_K(12)^4+TTmV(12)*m(12)+b(12)		
+				TT_K(12)=SQR(SQR(TT_K(12)))		
+				'Convert target temperature into desired units		
+				TT_C(12)=TT_K(12)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(13),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(13),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(13)=1737340000+(9126780*SBT_C(13))+(95247.2*SBT_C(13)^2)		
+				b(13)=-18151800+(888.145*SBT_C(13))+(15603.9*SBT_C(13)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(13)=SBT_C(13)+273.15		
+				TT_K(13)=SBT_K(13)^4+TTmV(13)*m(13)+b(13)		
+				TT_K(13)=SQR(SQR(TT_K(13)))		
+				'Convert target temperature into desired units		
+				TT_C(13)=TT_K(13)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(14),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(14),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(14)=1432990000+(7521750*SBT_C(14))+(78210.1*SBT_C(14)^2)		
+				b(14)=-3974070+(3509.1*SBT_C(14))+(13660.6*SBT_C(14)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(14)=SBT_C(14)+273.15		
+				TT_K(14)=SBT_K(14)^4+TTmV(14)*m(14)+b(14)		
+				TT_K(14)=SQR(SQR(TT_K(14)))		
+				'Convert target temperature into desired units		
+				TT_C(14)=TT_K(14)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(15),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(15),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(15)=1376890000+(7239770*SBT_C(15))+(72395.2*SBT_C(15)^2)		
+				b(15)=-5217560+(-45019.4*SBT_C(15))+(15545.3*SBT_C(15)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(15)=SBT_C(15)+273.15		
+				TT_K(15)=SBT_K(15)^4+TTmV(15)*m(15)+b(15)		
+				TT_K(15)=SQR(SQR(TT_K(15)))		
+				'Convert target temperature into desired units		
+				TT_C(15)=TT_K(15)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(16),1,3,VX2,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(16),1,mV2_5,1,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(16)=1367620000+(7237750*SBT_C(16))+(71645.9*SBT_C(16)^2)		
+				b(16)=-5766930+(-21127.4*SBT_C(16))+(14807.4*SBT_C(16)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(16)=SBT_C(16)+273.15		
+				TT_K(16)=SBT_K(16)^4+TTmV(16)*m(16)+b(16)		
+				TT_K(16)=SQR(SQR(TT_K(16)))		
+				'Convert target temperature into desired units		
+				TT_C(16)=TT_K(16)-273.15		
+		'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(2,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
+		PortSet(3,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(17),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(17),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(17)=1319160000+(6990600*SBT_C(17))+(74259*SBT_C(17)^2)		
+				b(17)=-3260600+(3852.56*SBT_C(17))+(15757.4*SBT_C(17)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(17)=SBT_C(17)+273.15		
+				TT_K(17)=SBT_K(17)^4+TTmV(17)*m(17)+b(17)		
+				TT_K(17)=SQR(SQR(TT_K(17)))		
+				'Convert target temperature into desired units		
+				TT_C(17)=TT_K(17)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(18),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(18),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(18)=1347710000+(7097850*SBT_C(18))+(73741.2*SBT_C(18)^2)		
+				b(18)=-5754910+(-18618.3*SBT_C(18))+(13883.8*SBT_C(18)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(18)=SBT_C(18)+273.15		
+				TT_K(18)=SBT_K(18)^4+TTmV(18)*m(18)+b(18)		
+				TT_K(18)=SQR(SQR(TT_K(18)))		
+				'Convert target temperature into desired units		
+				TT_C(18)=TT_K(18)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(19),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(19),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(19)=1373910000+(7204930*SBT_C(19))+(71235.4*SBT_C(19)^2)		
+				b(19)=2801350+(-42316.6*SBT_C(19))+(14731.4*SBT_C(19)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(19)=SBT_C(19)+273.15		
+				TT_K(19)=SBT_K(19)^4+TTmV(19)*m(19)+b(19)		
+				TT_K(19)=SQR(SQR(TT_K(19)))		
+				'Convert target temperature into desired units		
+				TT_C(19)=TT_K(19)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(20),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(20),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(20)=1432430000+(7402560*SBT_C(20))+(79259.3*SBT_C(20)^2)		
+				b(20)=-6857680+(133432*SBT_C(20))+(13799.7*SBT_C(20)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(20)=SBT_C(20)+273.15		
+				TT_K(20)=SBT_K(20)^4+TTmV(20)*m(20)+b(20)		
+				TT_K(20)=SQR(SQR(TT_K(20)))		
+				'Convert target temperature into desired units		
+				TT_C(20)=TT_K(20)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(21),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(21),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(21)=1368500000+(7282460*SBT_C(21))+(75238.7*SBT_C(21)^2)		
+				b(21)=-5148230+(94378.8*SBT_C(21))+(14931.7*SBT_C(21)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(21)=SBT_C(21)+273.15		
+				TT_K(21)=SBT_K(21)^4+TTmV(21)*m(21)+b(21)		
+				TT_K(21)=SQR(SQR(TT_K(21)))		
+				'Convert target temperature into desired units		
+				TT_C(21)=TT_K(21)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(22),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(22),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(22)=1340100000+(6959910*SBT_C(22))+(74279.9*SBT_C(22)^2)		
+				b(22)=-683085+(70789.2*SBT_C(22))+(13195.5*SBT_C(22)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(22)=SBT_C(22)+273.15		
+				TT_K(22)=SBT_K(22)^4+TTmV(22)*m(22)+b(22)		
+				TT_K(22)=SQR(SQR(TT_K(22)))		
+				'Convert target temperature into desired units		
+				TT_C(22)=TT_K(22)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(23),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(23),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(23)=1414580000+(7496330*SBT_C(23))+(79768.7*SBT_C(23)^2)		
+				b(23)=-4488640+(127752*SBT_C(23))+(14089.7*SBT_C(23)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(23)=SBT_C(23)+273.15		
+				TT_K(23)=SBT_K(23)^4+TTmV(23)*m(23)+b(23)		
+				TT_K(23)=SQR(SQR(TT_K(23)))		
+				'Convert target temperature into desired units		
+				TT_C(23)=TT_K(23)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C' and 'SBT_C'		
+				'Measure SI-111 sensor body thermistor temperature.  Therm109 (Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm109(SBT_C(24),1,4,VX3,0,_60Hz,1,0)		
+				'Measure SI-111 output of thermopile.  VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(TTmV(24),1,mV2_5,3,True,0,_60Hz,1,0,)		
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation		
+				m(24)=1332630000+(7031600*SBT_C(24))+(73620.1*SBT_C(24)^2)		
+				b(24)=-1572190+(37528.5*SBT_C(24))+(12417.8*SBT_C(24)^2)		
+				'Calculate target temperature using calculated slope (m) and offset (b)		
+				SBT_K(24)=SBT_C(24)+273.15		
+				TT_K(24)=SBT_K(24)^4+TTmV(24)*m(24)+b(24)		
+				TT_K(24)=SQR(SQR(TT_K(24)))		
+				'Convert target temperature into desired units		
+				TT_C(24)=TT_K(24)-273.15		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+		'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(3,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
+		PortSet(4,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(1),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(1) < 0 Then SlrReflectkW(1) = 0		
+				SlrReflectMJ(1)=SlrReflectkW(1) * 0.12		
+				SlrReflectkW(1)=SlrReflectkW(1) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(2),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(2) < 0 Then SlrReflectkW(2) = 0		
+				SlrReflectMJ(2)=SlrReflectkW(2) * 0.12		
+				SlrReflectkW(2)=SlrReflectkW(2) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(3),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(3) < 0 Then SlrReflectkW(3) = 0		
+				SlrReflectMJ(3)=SlrReflectkW(3) * 0.12		
+				SlrReflectkW(3)=SlrReflectkW(3) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(4),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(4) < 0 Then SlrReflectkW(4) = 0		
+				SlrReflectMJ(4)=SlrReflectkW(4) * 0.12		
+				SlrReflectkW(4)=SlrReflectkW(4) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(5),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(5) < 0 Then SlrReflectkW(5) = 0		
+				SlrReflectMJ(5)=SlrReflectkW(5) * 0.12		
+				SlrReflectkW(5)=SlrReflectkW(5) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(6),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(6) < 0 Then SlrReflectkW(6) = 0		
+				SlrReflectMJ(6)=SlrReflectkW(6) * 0.12		
+				SlrReflectkW(6)=SlrReflectkW(6) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(7),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(7) < 0 Then SlrReflectkW(7) = 0		
+				SlrReflectMJ(7)=SlrReflectkW(7) * 0.12		
+				SlrReflectkW(7)=SlrReflectkW(7) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(8),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(8) < 0 Then SlrReflectkW(8) = 0		
+				SlrReflectMJ(8)=SlrReflectkW(8) * 0.12		
+				SlrReflectkW(8)=SlrReflectkW(8) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(9),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(9) < 0 Then SlrReflectkW(9) = 0		
+				SlrReflectMJ(9)=SlrReflectkW(9) * 0.12		
+				SlrReflectkW(9)=SlrReflectkW(9) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(10),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(10) < 0 Then SlrReflectkW(10) = 0		
+				SlrReflectMJ(10)=SlrReflectkW(10) * 0.12		
+				SlrReflectkW(10)=SlrReflectkW(10) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(11),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(11) < 0 Then SlrReflectkW(11) = 0		
+				SlrReflectMJ(11)=SlrReflectkW(11) * 0.12		
+				SlrReflectkW(11)=SlrReflectkW(11) * 0.2		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'LI200X Pyranometer measurements 'SlrMJReflect' and 'SlrkWReflect' VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(SlrReflectkW(12),1,mV7_5,4,True,0,_60Hz,1,0)		
+				if SlrReflectkW(12) < 0 Then SlrReflectkW(12) = 0		
+				SlrReflectMJ(12)=SlrReflectkW(12) * 0.12		
+				SlrReflectkW(12)=SlrReflectkW(12) * 0.2		
+		'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(4,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
+		PortSet(5,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(1),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(2),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(3),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(4),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(5),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(6),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(7),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(8),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(9),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(10),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(11),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(12),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(13),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(14),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(15),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(16),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(17),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(18),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(19),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(20),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(21),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(22),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm108(Dest,Reps,SEChan,VxChan,Settlingtime,Integration,Multiplier,Offset)		
+				Therm108(SoilSurfTC(23),1,16,VX1,0,_60hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'108 Temperature Probe measurement 'T108_C.  Therm107(Dest, Reps, SEChan, VX/ExChan, SettlingTime, Integ, Mult, Offset)		
+				Therm108(SoilSurfTC(24),1,16,VX1,0,_60Hz,1,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(5,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
+		PortSet(6,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(1),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(2),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(3),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(4),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(5),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(6),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(7),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(8),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(9),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(10),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(11),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(12),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(13),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(14),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(15),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(16),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(17),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(18),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(19),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(20),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(21),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(22),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(23),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(24),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(25),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(26),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			'Switch on next AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(1,10000)			
+				'Measure Voltage Differential for Linear PAR sensor VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(LinPAR(27),1,mV2500,7,True,0,_60Hz,33.3,0)		
+			PulsePort(1,10000)
+				'Measure incoming radiation using Hukseflux albedometer
+				'VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(AlbedoUp, 1, mV25, 7, True, 0, _60Hz, 42.4628450, 0)	
+			PulsePort(1,10000)
+				'Measure Outgoing radiation using Hukseflux albedometer
+				'VoltDiff(Dest, Reps, Range, DiffChan, RevDiff, SettlingTime, Integ, Mult, Offset)		
+				VoltDiff(AlbedoDown, 1, mV25, 7, True, 0, _60Hz, 49.3096646, 0)					
+		'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(6,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Call Data Tables and Store Data				
+		CallTable(AllData)				
+	NextScan					
+EndProg						
