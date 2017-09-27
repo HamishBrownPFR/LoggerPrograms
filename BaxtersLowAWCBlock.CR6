@@ -1,0 +1,229 @@
+'CR6 Series
+'Created by Short Cut (4.0)
+
+'Declare Variables and Units
+Dim TT_K(8)
+Dim SBT_K(8)
+Dim m(8)
+Dim b(8)
+Public BattV
+Public PTemp_C
+Public TT_C(8)
+Public SBT_C(8)
+Public TTmV(8)
+Public TRHData(2)					
+Public SlrkW						
+Public SlrMJ						
+Public Rain_mm						
+Public WS_ms
+Alias TRHData(1)=AirTC
+Alias TRHData(2)=RH
+' Irr sensor  1           2           3           4           5           6           7           8
+Dim MC0(8) = {1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000}
+Dim MC1(8) = {6942310,    6942310,    6942310,    6942310,    6942310,    6942310,    6942310,    6942310}
+Dim MC2(8) = {77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1}
+Dim BC0(8) = {13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213}
+Dim BC1(8) = {85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1}
+Dim BC2(8) = {12783,      12783,      12783,      12783,      12783,      12783,      12783,      12783}
+
+Units BattV=Volts
+Units PTemp_C=Deg C		
+Units TT_C=Deg C						
+Units SBT_C=Deg C						
+Units TTmV=mV
+Units AirTC=Deg C
+Units RH=%					
+Units SlrkW=kW/m^2						
+Units SlrMJ=MJ/m^2						
+Units Rain_mm=mm						
+Units WS_ms=meters/second
+'Define Data Tables
+DataTable(AllData,True,-1)
+  DataInterval(0,5,min,10)
+  Average(1, BattV,FP2,False)
+  Average(1, PTemp_C,FP2,False)
+  Average(1, TT_C(1),FP2,False)
+  Average(1, SBT_C(1),FP2,False)
+  Average(1, TTmV(1),FP2,False)
+  Average(1, TT_C(2),FP2,False)
+  Average(1, SBT_C(2),FP2,False)
+  Average(1, TTmV(2),FP2,False)
+  Average(1, TT_C(3),FP2,False)
+  Average(1, SBT_C(3),FP2,False)
+  Average(1, TTmV(3),FP2,False)
+  Average(1, TT_C(4),FP2,False)
+  Average(1, SBT_C(4),FP2,False)
+  Average(1, TTmV(4),FP2,False)
+  Average(1, TT_C(5),FP2,False)
+  Average(1, SBT_C(5),FP2,False)
+  Average(1, TTmV(5),FP2,False)
+  Average(1, TT_C(6),FP2,False)
+  Average(1, SBT_C(6),FP2,False)
+  Average(1, TTmV(6),FP2,False)
+  Average(1, TT_C(7),FP2,False)
+  Average(1, SBT_C(7),FP2,False)
+  Average(1, TTmV(7),FP2,False)
+  Average(1, TT_C(8),FP2,False)
+  Average(1, SBT_C(8),FP2,False)
+  Average(1, TTmV(8),FP2,False)
+  Average(1, AirTC,FP2,False)					
+  Maximum(1, RH,FP2,False,False)					
+  Average(1, SlrkW,FP2,False)					
+  Totalize(1, SlrMJ,IEEE4,False)					
+  Totalize(1, Rain_mm,FP2,False)					
+  Average(1, WS_ms,FP2,False)	
+EndTable
+
+'Main Program
+BeginProg
+	'Main Scan
+	Scan(5,Sec,1,0)
+		'Default CR6 Datalogger Battery Voltage measurement 'BattV'
+		Battery(BattV)
+		'Default CR6 Datalogger Wiring Panel Temperature measurement 'PTemp_C'
+		PanelTemp(PTemp_C,60)
+		'CS215 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'
+		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
+		'CS300 Pyranometer measurements 'SlrMJ' and 'SlrkW'
+		VoltSe(SlrkW,1,mV1000,U5,True,0,60,1,0)
+		If SlrkW<0 Then SlrkW=0
+		SlrMJ=SlrkW*2.5E-05
+		SlrkW=SlrkW*0.005	
+		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'
+		PulseCount(Rain_mm,1,U8,1,0,0.1,0)		
+		'P2546A Wind Speed Sensor measurement 'WS_ms'
+		PulseCount(WS_ms,1,U7,1,1,0.6201,0.27)
+		If WS_ms<=0.27 Then WS_ms=0	
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)		
+		PortSet(C2,1)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(C1,10000)		
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(1)' and 'SBT_C(1)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(1),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(1),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(1)=MC0(1)+(MC1(1)*SBT_C(1))+(MC2(1)*SBT_C(1)^2)
+				b(1)=BC0(1)+(BC1(1)*SBT_C(1))+(BC2(1)*SBT_C(1)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(1)=SBT_C(1)+273.15
+				TT_K(1)=SBT_K(1)^4+TTmV(1)*m(1)+b(1)
+				TT_K(1)=SQR(SQR(TT_K(1)))
+				'Convert target temperature into desired units
+				TT_C(1)=TT_K(1)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(2)' and 'SBT_C(2)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(2),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(2),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(2)=MC0(2)+(MC1(2)*SBT_C(2))+(MC2(2)*SBT_C(2)^2)
+				b(2)=BC0(2)+(BC1(2)*SBT_C(2))+(BC2(2)*SBT_C(2)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(2)=SBT_C(2)+273.15
+				TT_K(2)=SBT_K(2)^4+TTmV(2)*m(2)+b(2)
+				TT_K(2)=SQR(SQR(TT_K(2)))
+				'Convert target temperature into desired units
+				TT_C(2)=TT_K(2)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(3)' and 'SBT_C(3)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(3),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(3),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(3)=MC0(3)+(MC1(3)*SBT_C(3))+(MC2(3)*SBT_C(3)^2)
+				b(3)=BC0(3)+(BC1(3)*SBT_C(3))+(BC2(3)*SBT_C(3)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(3)=SBT_C(3)+273.15
+				TT_K(3)=SBT_K(3)^4+TTmV(3)*m(3)+b(3)
+				TT_K(3)=SQR(SQR(TT_K(3)))
+				'Convert target temperature into desired units
+				TT_C(3)=TT_K(3)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(4)' and 'SBT_C(4)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(4),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(4),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(4)=MC0(4)+(MC1(4)*SBT_C(4))+(MC2(4)*SBT_C(4)^2)
+				b(4)=BC0(4)+(BC1(4)*SBT_C(4))+(BC2(4)*SBT_C(4)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(4)=SBT_C(4)+273.15
+				TT_K(4)=SBT_K(4)^4+TTmV(4)*m(4)+b(4)
+				TT_K(4)=SQR(SQR(TT_K(4)))
+				'Convert target temperature into desired units
+				TT_C(4)=TT_K(4)-273.15		
+				'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)	
+			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
+			PulsePort(C1,10000)		
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(5)' and 'SBT_C(5)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(5),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(5),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(5)=MC0(5)+(MC1(5)*SBT_C(5))+(MC2(5)*SBT_C(5)^2)
+				b(5)=BC0(5)+(BC1(5)*SBT_C(5))+(BC2(5)*SBT_C(5)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(5)=SBT_C(5)+273.15
+				TT_K(5)=SBT_K(5)^4+TTmV(5)*m(5)+b(5)
+				TT_K(5)=SQR(SQR(TT_K(5)))
+				'Convert target temperature into desired units
+				TT_C(5)=TT_K(5)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(6)' and 'SBT_C(6)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(6),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(6),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(6)=MC0(6)+(MC1(6)*SBT_C(6))+(MC2(6)*SBT_C(6)^2)
+				b(6)=BC0(6)+(BC1(6)*SBT_C(6))+(BC2(6)*SBT_C(6)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(6)=SBT_C(6)+273.15
+				TT_K(6)=SBT_K(6)^4+TTmV(6)*m(6)+b(6)
+				TT_K(6)=SQR(SQR(TT_K(6)))
+				'Convert target temperature into desired units
+				TT_C(6)=TT_K(6)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(7)' and 'SBT_C(7)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(7),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(7),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(7)=MC0(7)+(MC1(7)*SBT_C(7))+(MC2(7)*SBT_C(7)^2)
+				b(7)=BC0(7)+(BC1(7)*SBT_C(7))+(BC2(7)*SBT_C(7)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(7)=SBT_C(7)+273.15
+				TT_K(7)=SBT_K(7)^4+TTmV(7)*m(7)+b(7)
+				TT_K(7)=SQR(SQR(TT_K(7)))
+				'Convert target temperature into desired units
+				TT_C(7)=TT_K(7)-273.15
+			PulsePort(C1,10000)	
+				'SI-111 Precision Infrared Radiometer measurements 'TT_C(8)' and 'SBT_C(8)'
+				'Measure SI-111 sensor body thermistor temperature
+				Therm109(SBT_C(8),1,U1,U2,0,60,1,0)
+				'Measure SI-111 output of thermopile
+				VoltDiff(TTmV(8),1,mV200,U3,True,0,60,1,0)
+				'Calculate slope (m) and offset (b) coefficients for target temperature calculation
+				m(8)=MC0(8)+(MC1(8)*SBT_C(8))+(MC2(8)*SBT_C(8)^2)
+				b(8)=BC0(8)+(BC1(8)*SBT_C(8))+(BC2(8)*SBT_C(8)^2)
+				'Calculate target temperature using calculated slope (m) and offset (b)
+				SBT_K(8)=SBT_C(8)+273.15
+				TT_K(8)=SBT_K(8)^4+TTmV(8)*m(8)+b(8)
+				TT_K(8)=SQR(SQR(TT_K(8)))
+				'Convert target temperature into desired units
+				TT_C(8)=TT_K(8)-273.15		
+				'Turn AM16/32 Multiplexer Off.  PortSet(DataLogger channel C#, State 0=off and reset)				
+		PortSet(C2,0)				
+		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
+		'Call Data Tables and Store Data
+		CallTable AllData
+	NextScan
+EndProg
