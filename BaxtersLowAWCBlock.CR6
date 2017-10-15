@@ -11,67 +11,49 @@ Public PTemp_C
 Public TT_C(8)
 Public SBT_C(8)
 Public TTmV(8)
-Public TRHData(2)					
-Public SlrkW						
-Public SlrMJ						
-Public Rain_mm						
-Public WS_ms
-Alias TRHData(1)=AirTC
-Alias TRHData(2)=RH
-' Irr sensor  1           2           3           4           5           6           7           8
-Dim MC0(8) = {1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000, 1321320000}
-Dim MC1(8) = {6942310,    6942310,    6942310,    6942310,    6942310,    6942310,    6942310,    6942310}
-Dim MC2(8) = {77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1,    77904.1}
-Dim BC0(8) = {13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213,13213.33213}
-Dim BC1(8) = {85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1,    85649.1}
-Dim BC2(8) = {12783,      12783,      12783,      12783,      12783,      12783,      12783,      12783}
+' IRR sensor  7121			7122		7123		7124		3399		3388		3389		3384		
+Dim MC0(8) = {75400.9,		101977,		98494.6,	103906,		73401.4,	76906,		71235.4,	79259.3		}
+Dim MC1(8) = {7934100,		8789120,	8565400,	8820150,	7045270,	7058920,	7204930,	7402560		}
+Dim MC2(8) = {1374290000,	1444450000,	1440520000,	1478200000,	1341860000,	1371730000,	1373910000,	1432430000	}
+Dim BC0(8) = {7168.17,		2727.95,	4430.23,	3892.28,	14900.8,	14153.7,	14731.4,	13799.7		}
+Dim BC1(8) = {70604.1,		56474.8,	44449.5,	14270.1,	24049.6,	-35518.4,	-42316.6,	133432		}
+Dim BC2(8) = {-8920780,		-945628,	-2414830,	-8389420,	647879,		-6107980,	2801350,	-6857680	}
 
 Units BattV=Volts
 Units PTemp_C=Deg C		
 Units TT_C=Deg C						
 Units SBT_C=Deg C						
 Units TTmV=mV
-Units AirTC=Deg C
-Units RH=%					
-Units SlrkW=kW/m^2						
-Units SlrMJ=MJ/m^2						
-Units Rain_mm=mm						
-Units WS_ms=meters/second
+
 'Define Data Tables
 DataTable(AllData,True,-1)
-  DataInterval(0,5,min,10)
-  Average(1, BattV,FP2,False)
-  Average(1, PTemp_C,FP2,False)
-  Average(1, TT_C(1),FP2,False)
-  Average(1, SBT_C(1),FP2,False)
-  Average(1, TTmV(1),FP2,False)
-  Average(1, TT_C(2),FP2,False)
-  Average(1, SBT_C(2),FP2,False)
-  Average(1, TTmV(2),FP2,False)
-  Average(1, TT_C(3),FP2,False)
-  Average(1, SBT_C(3),FP2,False)
-  Average(1, TTmV(3),FP2,False)
-  Average(1, TT_C(4),FP2,False)
-  Average(1, SBT_C(4),FP2,False)
-  Average(1, TTmV(4),FP2,False)
-  Average(1, TT_C(5),FP2,False)
-  Average(1, SBT_C(5),FP2,False)
-  Average(1, TTmV(5),FP2,False)
-  Average(1, TT_C(6),FP2,False)
-  Average(1, SBT_C(6),FP2,False)
-  Average(1, TTmV(6),FP2,False)
-  Average(1, TT_C(7),FP2,False)
-  Average(1, SBT_C(7),FP2,False)
-  Average(1, TTmV(7),FP2,False)
-  Average(1, TT_C(8),FP2,False)
-  Average(1, SBT_C(8),FP2,False)
-  Average(1, TTmV(8),FP2,False)
-  Average(1, AirTC,FP2,False)					
-  Maximum(1, RH,FP2,False,False)					
-  Average(1, SlrkW,FP2,False)					
-  Totalize(1, SlrMJ,IEEE4,False)					
-  Totalize(1, Rain_mm,FP2,False)					
-  Average(1, WS_ms,FP2,False)	
+	DataInterval(0,5,min,10)
+	Average(1,BattV,FP2,False)
+	Average(1, PTemp_C,FP2,False)
+    Average(1, TT_C(1),FP2,False)
+    Average(1, SBT_C(1),FP2,False)
+    Average(1, TTmV(1),FP2,False)
+    Average(1, TT_C(2),FP2,False)
+    Average(1, SBT_C(2),FP2,False)
+    Average(1, TTmV(2),FP2,False)
+    Average(1, TT_C(3),FP2,False)
+    Average(1, SBT_C(3),FP2,False)
+    Average(1, TTmV(3),FP2,False)
+    Average(1, TT_C(4),FP2,False)
+    Average(1, SBT_C(4),FP2,False)
+    Average(1, TTmV(4),FP2,False)
+	Average(1, TT_C(5),FP2,False)
+    Average(1, SBT_C(5),FP2,False)
+    Average(1, TTmV(5),FP2,False)
+    Average(1, TT_C(6),FP2,False)
+    Average(1, SBT_C(6),FP2,False)
+    Average(1, TTmV(6),FP2,False)
+    Average(1, TT_C(7),FP2,False)
+    Average(1, SBT_C(7),FP2,False)
+    Average(1, TTmV(7),FP2,False)
+    Average(1, TT_C(8),FP2,False)
+    Average(1, SBT_C(8),FP2,False)
+    Average(1, TTmV(8),FP2,False)
 EndTable
 
 'Main Program
@@ -82,19 +64,7 @@ BeginProg
 		Battery(BattV)
 		'Default CR6 Datalogger Wiring Panel Temperature measurement 'PTemp_C'
 		PanelTemp(PTemp_C,60)
-		'CS215 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'
-		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
-		'CS300 Pyranometer measurements 'SlrMJ' and 'SlrkW'
-		VoltSe(SlrkW,1,mV1000,U5,True,0,60,1,0)
-		If SlrkW<0 Then SlrkW=0
-		SlrMJ=SlrkW*2.5E-05
-		SlrkW=SlrkW*0.005	
-		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'
-		PulseCount(Rain_mm,1,U8,1,0,0.1,0)		
-		'P2546A Wind Speed Sensor measurement 'WS_ms'
-		PulseCount(WS_ms,1,U7,1,1,0.6201,0.27)
-		If WS_ms<=0.27 Then WS_ms=0	
-		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)		
+		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
 		PortSet(C2,1)				
 		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
 			'Switch on the first AM416 Multiplexer channel.  PulsePort(DataLogger channel C#, Delay)			
