@@ -59,7 +59,7 @@ EndTable
 'Main Program
 BeginProg
 	'Main Scan
-	Scan(5,Sec,1,0)
+	Scan(5,min,1,0)
 		'Default CR6 Datalogger Battery Voltage measurement 'BattV'
 		Battery(BattV)
 		'Default CR6 Datalogger Wiring Panel Temperature measurement 'PTemp_C'

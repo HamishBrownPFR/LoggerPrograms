@@ -74,7 +74,7 @@ EndTable
 'Main Program
 BeginProg
 	'Main Scan
-	Scan(5,Sec,1,0)
+	Scan(5,min,1,0)
 		'Default CR6 Datalogger Battery Voltage measurement 'BattV'
 		Battery(BattV)
 		'Default CR6 Datalogger Wiring Panel Temperature measurement 'PTemp_C'
@@ -84,9 +84,9 @@ BeginProg
 		'Apogee SP-110 pyranometer 'SlrMJ' and 'SlrkW'
     VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
 		If SlrkW<0 Then SlrkW=0
-		SlrMJ=SlrkW/0.3
+		SlrMJ=SlrkW/0.003
 		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'
-		PulseCount(Rain_mm,1,U8,1,0,0.1,0)		
+		PulseCount(Rain_mm,1,U8,1,0,0.2,0)		
 		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)		
 		PortSet(C2,1)				
 		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
