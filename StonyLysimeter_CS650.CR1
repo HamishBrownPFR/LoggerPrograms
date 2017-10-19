@@ -5,14 +5,14 @@ Public BattV
 Public PTemp_C
 
 DataTable (StonyLysimetersCS650,1,-1)      'DataTable(Name, TrigVar, Size) See page 128 of CR1000 manual for description
-  DataInterval (0,15,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
+  DataInterval (0,1,Min,2)       'DataInterval(TintoInt, Interval, Units, Lapses) See page 129 of CR1000 manual for description
   Average(1,BattV,FP2,False)	
   Average(1,PTemp_C,FP2,False)  
   Sample (576,CS650(),IEEE4)
 EndTable
 BeginProg
 SequentialMode
-Scan (15,Min,0,0)
+Scan (1,Min,0,0)
   
         'Default Datalogger Battery Voltage measurement 'BattV'				
 		Battery(BattV)				
