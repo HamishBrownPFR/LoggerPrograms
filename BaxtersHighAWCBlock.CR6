@@ -11,6 +11,11 @@ Public PTemp_C
 Public TT_C(8)
 Public SBT_C(8)
 Public TTmV(8)
+Public TRHData(2)					
+Public Wind_ms						
+Alias TRHData(1)=AirTC
+Alias TRHData(2)=RH
+
 ' Irr sensor  7113			7114		7115		7116		3380		3379		3390		3385		
 Dim MC2(8) = {129209,		104494,		105486,		95081.5,	75992,		77904.1,	77553.2,	70955		}
 Dim MC1(8) = {11213500, 	8846310,	9206580,	8590890,	7277220,	6942310,	7449540,	7242140		}
@@ -24,6 +29,9 @@ Units PTemp_C=Deg C
 Units TT_C=Deg C						
 Units SBT_C=Deg C						
 Units TTmV=mV
+Units AirTC=Deg C
+Units RH=%					
+Units Wind_ms=m/s
 
 'Define Data Tables
 DataTable(AllData,True,-1)
@@ -42,7 +50,7 @@ DataTable(AllData,True,-1)
     Average(1, TT_C(4),FP2,False)
     Average(1, SBT_C(4),FP2,False)
     Average(1, TTmV(4),FP2,False)
-	Average(1, TT_C(5),FP2,False)
+	  Average(1, TT_C(5),FP2,False)
     Average(1, SBT_C(5),FP2,False)
     Average(1, TTmV(5),FP2,False)
     Average(1, TT_C(6),FP2,False)
@@ -54,6 +62,9 @@ DataTable(AllData,True,-1)
     Average(1, TT_C(8),FP2,False)
     Average(1, SBT_C(8),FP2,False)
     Average(1, TTmV(8),FP2,False)
+    Average(1, AirTC,FP2,False)					
+    Maximum(1, RH,FP2,False,False)					
+    Average(1, Wind_ms,FP2,False)		
 EndTable
 
 'Main Program
@@ -64,6 +75,10 @@ BeginProg
 		Battery(BattV)
 		'Default CR6 Datalogger Wiring Panel Temperature measurement 'PTemp_C'
 		PanelTemp(PTemp_C,60)
+		'CS215 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'
+		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
+		'Wind speed sensor
+		PulseCount(Wind_ms,1,U9,1,0,0.2,0)
 		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
 		PortSet(C2,1)				
 		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				

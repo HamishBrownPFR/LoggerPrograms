@@ -14,7 +14,8 @@ Public TTmV(8)
 Public TRHData(2)					
 Public SlrkW						
 Public SlrMJ						
-Public Rain_mm						
+Public Rain_mm
+Public Wind_ms						
 Alias TRHData(1)=AirTC
 Alias TRHData(2)=RH
 ' IRR sensor  7117			7118		7119		7120		3386		3381		3383		3382
@@ -34,7 +35,8 @@ Units AirTC=Deg C
 Units RH=%					
 Units SlrkW=kW/m^2						
 Units SlrMJ=MJ/m^2						
-Units Rain_mm=mm						
+Units Rain_mm=mm
+Units Wind_ms=m/s						
 'Define Data Tables
 DataTable(AllData,True,-1)
   DataInterval(0,5,min,10)
@@ -68,7 +70,8 @@ DataTable(AllData,True,-1)
   Maximum(1, RH,FP2,False,False)					
   Average(1, SlrkW,FP2,False)					
   Totalize(1, SlrMJ,IEEE4,False)					
-  Totalize(1, Rain_mm,FP2,False)					
+  Totalize(1, Rain_mm,FP2,False)	
+  Average(1, Wind_ms,FP2,False)				
 EndTable
 
 'Main Program
@@ -81,8 +84,10 @@ BeginProg
 		PanelTemp(PTemp_C,60)
 		'CS215 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'
 		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
+		'Wind speed sensor
+		PulseCount(Wind_ms,1,U9,1,0,0.2,0)
 		'Apogee SP-110 pyranometer 'SlrMJ' and 'SlrkW'
-    VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
+        VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
 		If SlrkW<0 Then SlrkW=0
 		SlrMJ=SlrkW * 0.003
 		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'
