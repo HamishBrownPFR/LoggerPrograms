@@ -78,7 +78,7 @@ BeginProg
 		'CS215 Temperature & Relative Humidity Sensor measurements 'AirTC' and 'RH'
 		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
 		'Wind speed sensor
-		PulseCount(Wind_ms,1,U9,1,0,0.2,0)
+		PulseCount(Wind_ms,1,U10,5,1,0.765,0.35)
 		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)				
 		PortSet(C2,1)				
 		Delay(0,150,mSec)  'Delay(Option, Delay, Units)				
