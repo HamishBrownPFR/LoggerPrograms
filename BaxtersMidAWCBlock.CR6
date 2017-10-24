@@ -86,6 +86,7 @@ BeginProg
 		SDI12Recorder(TRHData(),C3,"0","M!",1,0,-1)			
 		'Wind speed sensor
 		PulseCount(Wind_ms,1,U10,5,1,0.765,0.35)
+		If Wind_ms<0.36 Then Wind_ms = 0
 		'Apogee SP-110 pyranometer 'SlrMJ' and 'SlrkW'
      VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
 		If SlrkW<0 Then SlrkW=0
