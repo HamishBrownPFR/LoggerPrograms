@@ -69,7 +69,7 @@ DataTable(AllData,True,-1)
   Average(1, AirTC,FP2,False)					
   Maximum(1, RH,FP2,False,False)					
   Average(1, SlrkW,FP2,False)					
-  Totalize(1, SlrMJ,IEEE4,False)					
+  Average(1, SlrMJ,IEEE4,False)					
   Totalize(1, Rain_mm,FP2,False)	
   Average(1, Wind_ms,FP2,False)				
 EndTable
