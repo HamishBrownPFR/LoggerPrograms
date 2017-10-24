@@ -88,9 +88,10 @@ BeginProg
 		PulseCount(Wind_ms,1,U10,5,1,0.765,0.35)
 		If Wind_ms<0.36 Then Wind_ms = 0
 		'Apogee SP-110 pyranometer 'SlrMJ' and 'SlrkW'
-     VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
+        VoltDiff (SlrkW,1,mV1000,U5,True ,0,60,5.0,0)
 		If SlrkW<0 Then SlrkW=0
-		SlrMJ=SlrkW * 0.003
+		SlrMJ=SlrkW * 0.0003
+		SlrkW = SlrkW * 1000
 		'Generic Tipping Bucket Rain Gauge measurement 'Rain_mm'
 		PulseCount(Rain_mm,1,U8,1,0,0.2,0)		
 		'Turn AM16/32 Multiplexer On.  PortSet(DataLogger com channel, State 1=on and can respond to clock pulses)		
