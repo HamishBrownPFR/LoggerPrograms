@@ -18,7 +18,7 @@ Public LastGoodValue(4)
 Public MeanWP
 
 Const IrrigationDuration = 5
-Const CoolingDuration = 0.6
+Const CoolingDuration = 20
 Const TriggerWP = 2.5
 Const CoolTrigger = 26.0
 Const Alpha = 1
@@ -103,11 +103,11 @@ EndFunction
 
 Function DoCooling(CoolDurat)
       PortSet(1,1)				
-			Delay(0,CoolDurat*1.1,Min)
+			Delay(0,CoolDurat*1.0,sec)
 			PortSet(1,0)
 			Delay(0,5,Sec)
 			PortSet(2,1)				
-			Delay(0,CoolDurat*0.9,Min)
+			Delay(0,CoolDurat*0.8,sec)
 			PortSet(2,0)
 			CoolingCount +=1
 EndFunction
@@ -136,7 +136,7 @@ EndTable
 'Main Program
 BeginProg
 	'Main Scan
-	Scan(20,min,1,0)
+	Scan(10,min,1,0)
 		'Default Datalogger Battery Voltage measurement 'BattV'
 		Battery(BattV)
 		'Default Wiring Panel Temperature measurement 'PTemp_C'
@@ -152,7 +152,7 @@ BeginProg
 		'Update time variable				
 		RealTime(RTime(1))		'1=year, 2=month, 3=day of month, 4=hour of day, 5=minutes, 6=seconds, 7=microseconds, 8=day of week, 9=day of year		
 		'If the time is right consider applying irrigation
-    If RTime(4) >= 4 AND RTime(4) < 6 Then
+    If (RTime(4) >= 4 AND RTime(4) < 7) Then
       'If pots are dry give them a squirt of irrigation
 		  While MeanWP > TriggerWP
 		    DoIrrigation(IrrigationDuration) 'Put water om
@@ -163,7 +163,7 @@ BeginProg
     EndIf		
 		Delay(0,150,mSec)  'Delay(Option, Delay, Units)
 		'If the time is right consider cooling the tables
-		If RTime(4) >= 10 AND RTime(4) < 18 Then
+		If (RTime(4) >= 10 AND RTime(4) < 18) Then
 		  'If the temperature is sufficiently high give a short squirt of water to cool things down
 		  If T107_C > CoolTrigger Then
 		    DoCooling(CoolingDuration)
